@@ -468,11 +468,21 @@ main() {
 
 Next steps (new shell, or 'source ${profile:-your shell profile}' first):
 
+  sgit rd                    # seal a repo: per-developer keys, you trigger CI
+  sgit init --wizard         # or answer questions instead
+
   seal up                    # run the whole Portal stack locally
   seal deploy railway WS     # deploy to a Railway workspace
   seal help                  # everything else
 
-  sgit init --wizard         # set up your first repo
+\`seal\` is a small launcher on your PATH; the implementation lives at
+  ${CODESEAL}/scripts/seal.sh
+and can be run directly if you prefer. That directory is deliberately NOT
+added to PATH — it also holds build.sh, dev.sh and install.sh, and those
+are not commands you want globally.
+
+Your keys live in ${CODESEAL}. Back it up: a repository can be re-cloned,
+these cannot be regenerated.
 
 NEXT
 }
