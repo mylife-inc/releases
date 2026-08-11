@@ -55,6 +55,14 @@ set -eu
 DEFAULT_REPO="mylife-inc/releases"
 REPO="${SGIT_REPO:-$DEFAULT_REPO}"
 SCOPE="${SGIT_SCOPE:-codeseal}"
+
+# Where a signature was MADE, which is not where the file was downloaded from.
+#
+# Sigstore binds a signature to the workflow identity that produced it. That
+# workflow runs in the source repository; the artefact is republished here.
+# Checking the download location instead would accept a signature made by any
+# workflow in the artefact repository — including one for a different product.
+SIGNING_REPO="${SGIT_SIGNING_REPO:-mylife-inc/CodeSeal}"
 VERSION="${SGIT_VERSION:-latest}"
 INSTALL_DIR="${SGIT_INSTALL_DIR:-}"
 SKIP_VERIFY="${SGIT_SKIP_VERIFY:-0}"
@@ -199,7 +207,7 @@ verify_cosign() {
   cosign verify-blob \
     --certificate "${cert}" \
     --signature "${sig}" \
-    --certificate-identity-regexp "^https://github.com/${REPO}/" \
+    --certificate-identity-regexp "^https://github.com/${SIGNING_REPO}/" \
     --certificate-oidc-issuer https://token.actions.githubusercontent.com \
     "${archive}" >/dev/null 2>&1 \
     || { err "cosign signature verification FAILED."; return 3; }
