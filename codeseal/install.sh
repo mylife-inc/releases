@@ -317,8 +317,24 @@ download_assets() {
     ( cd "${tmpdir}" && tar -xzf "${assets_asset}" ) || die "Failed to extract operator assets." 4
   fi
 
-  srcdir="${tmpdir}/codeseal-assets"
-  [ -d "${srcdir}" ] || die "Operator assets have an unexpected layout." 4
+  # Accept both layouts.
+  #
+  # The archive may wrap its contents in `codeseal-assets/`, or lay them out at
+  # the top level. Requiring the wrapper made the installer die on an archive
+  # that was otherwise perfectly good — checksum verified, every file present,
+  # nested one directory differently than expected.
+  #
+  # What actually matters is that `scripts/` is there, because that is what the
+  # `seal` launcher execs into.
+  if [ -d "${tmpdir}/codeseal-assets/scripts" ]; then
+    srcdir="${tmpdir}/codeseal-assets"
+  elif [ -d "${tmpdir}/scripts" ]; then
+    srcdir="${tmpdir}"
+  else
+    err "Operator assets are missing scripts/ — found:"
+    ls -1 "${tmpdir}" >&2
+    die "Cannot install operator assets." 4
+  fi
 
   rm -rf "${CODESEAL}/scripts" "${CODESEAL}/infra"
   cp -R "${srcdir}/scripts" "${CODESEAL}/scripts"
