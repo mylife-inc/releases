@@ -136,8 +136,23 @@ resolve_version() {
   # stable version. A pinned SGIT_VERSION still installs whatever it names,
   # which is how a release candidate gets tested. `v1.0.0-rc.1` does not match
   # below: the closing quote has to follow the digits.
+  # The request and the parse are separate, so a failed request cannot be
+  # reported as an empty result.
+  #
+  # They used to be one pipeline, and a 403 produced "Found no stable release
+  # in mylife-inc/releases" — a sentence about the wrong thing entirely. The
+  # release was there; the API had refused to say so. That message sent us
+  # looking for a missing release for as long as it took to read a CI log.
+  if ! releases=$(fetch_stdout "https://api.github.com/repos/${REPO}/releases?per_page=100"); then
+    die "Could not ask GitHub which ${SCOPE} releases exist.
+    The request to api.github.com failed — commonly rate limiting, which is
+    per-IP and applies to anonymous requests even on a public repository.
+    Set GITHUB_TOKEN (Actions injects one) to raise the limit, or pin a
+    version with SGIT_VERSION to skip the lookup entirely." 2
+  fi
+
   version=$(
-    fetch_stdout "https://api.github.com/repos/${REPO}/releases?per_page=100" |
+    printf '%s' "${releases}" |
       sed -n 's/.*"tag_name": *"'"${SCOPE}"'-\(v[0-9][0-9.]*\)".*/\1/p' |
       head -1
   )
@@ -150,12 +165,30 @@ resolve_version() {
 }
 
 # `fetch` writes to a file; this one writes to stdout, for the API query.
+#
+# Authenticated whenever a token is around, because the anonymous GitHub API
+# is rate-limited *by IP* and CI runners share heavily-used address pools. Four
+# jobs of one matrix installing at once is enough: one gets through and the
+# rest get 403, on a public repository that needs no credential to read.
+#
+# GITHUB_TOKEN is injected into every Actions job, so this costs nothing to
+# arrange and lifts the limit from 60 requests an hour to 1000.
 fetch_stdout() {
   url="$1"
+  token="${GITHUB_TOKEN:-${GH_TOKEN:-}}"
   if have curl; then
-    curl -fLSs --proto '=https' --tlsv1.2 --retry 3 "${url}"
+    if [ -n "${token}" ]; then
+      curl -fLSs --proto '=https' --tlsv1.2 --retry 3 \
+        -H "Authorization: Bearer ${token}" "${url}"
+    else
+      curl -fLSs --proto '=https' --tlsv1.2 --retry 3 "${url}"
+    fi
   elif have wget; then
-    wget -qO- "${url}"
+    if [ -n "${token}" ]; then
+      wget -qO- --header="Authorization: Bearer ${token}" "${url}"
+    else
+      wget -qO- "${url}"
+    fi
   else
     die "Need either 'curl' or 'wget' on PATH." 1
   fi
