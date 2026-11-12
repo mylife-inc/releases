@@ -9,7 +9,11 @@ binaries are built from private repositories and published so that a
 | product | install | tags |
 | --- | --- | --- |
 | [CodeSeal](codeseal/) | `curl -fsSL https://raw.githubusercontent.com/mylife-inc/releases/main/codeseal/install.sh \| sh` | `codeseal-v*` |
-| [Zellij](zellij/) | `curl -fsSL https://raw.githubusercontent.com/mylife-inc/releases/main/zellij/install.sh \| sh` | `zellij-v*` |
+| [Zellij](zellij/) | `brew install mylife-inc/tap/zel`, or the [pinned preview installers](zellij/README.md) | `zellij-v*` |
+
+Zellij's development source is temporarily public. Its artifacts stay here so
+installation remains independent of future source visibility. Its current
+development preview requires the explicit version in its installation guide.
 
 ## Why the tags are prefixed
 
