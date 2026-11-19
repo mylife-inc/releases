@@ -1,6 +1,6 @@
 # Zellij by Shebka
 
-The current development preview is **v0.2.0-rc.10**. This is the documentation
+The current development preview is **v0.2.0-rc.11**. This is the documentation
 and product website engine, unrelated to the terminal multiplexer.
 
 ## macOS and Linux
@@ -12,8 +12,8 @@ brew install mylife-inc/tap/zel
 Or install the native binary with an explicit preview version:
 
 ```sh
-curl -fsSL https://github.com/mylife-inc/releases/releases/download/zellij-v0.2.0-rc.10/install.sh -o /tmp/zel-install.sh
-ZEL_VERSION=v0.2.0-rc.10 sh /tmp/zel-install.sh
+curl -fsSL https://github.com/mylife-inc/releases/releases/download/zellij-v0.2.0-rc.11/install.sh -o /tmp/zel-install.sh
+ZEL_VERSION=v0.2.0-rc.11 sh /tmp/zel-install.sh
 ```
 
 The shell installer selects Intel/x64 or ARM64 and installs into `~/.local/bin`
@@ -22,8 +22,8 @@ by default. Add that directory to your PATH if needed. Linux requires glibc.
 ## Windows PowerShell
 
 ```powershell
-Invoke-WebRequest https://github.com/mylife-inc/releases/releases/download/zellij-v0.2.0-rc.10/install.ps1 -OutFile "$env:TEMP/zel-install.ps1"
-& "$env:TEMP/zel-install.ps1" -Version v0.2.0-rc.10
+Invoke-WebRequest https://github.com/mylife-inc/releases/releases/download/zellij-v0.2.0-rc.11/install.ps1 -OutFile "$env:TEMP/zel-install.ps1"
+& "$env:TEMP/zel-install.ps1" -Version v0.2.0-rc.11
 ```
 
 The native installer supports x64 and ARM64 Windows and defaults to
@@ -66,6 +66,17 @@ web-only builds need no Node.js or container runtime. Hosted commands use a supp
 container runtime and the CLI-matching engine image. Run `zel --help` for the
 command reference or `zel explain` for the embedded authoring model.
 
+## Composed sections
+
+The section composer supports layered media, plain-Markdown and semantic
+content, product selectors, feature explorers, bounded scroll stories and
+inline reuse of eight built-in section types. `zel presets` lists nine editable
+starting points; `zel ns -p product-overview` prints a ready-to-edit composition.
+The matching rc.11 engine renders these hosted sections. Keyboard navigation,
+reduced motion, print and no-JavaScript reading have explicit fallbacks.
+Compositions use a bounded schema; arbitrary MDX, scripts and animation timelines
+are not supported.
+
 ## Templates
 
 `zel templates` lists the bundled product documentation, hosted product page,
@@ -106,13 +117,13 @@ Each release also contains a catalog and checksummed archives. They remain
 available here independently of the development repository:
 
 ```sh
-zel create my-docs -t product-docs@0.1.0 --catalog https://github.com/mylife-inc/releases/releases/download/zellij-v0.2.0-rc.10/templates-catalog.json
+zel create my-docs -t product-docs@0.1.0 --catalog https://github.com/mylife-inc/releases/releases/download/zellij-v0.2.0-rc.11/templates-catalog.json
 ```
 
 Add `--offline` to reuse an already cached catalog and archive. Local directories
 are supported with `-t ./my-template`.
 
-The [release](https://github.com/mylife-inc/releases/releases/tag/zellij-v0.2.0-rc.10)
+The [release](https://github.com/mylife-inc/releases/releases/tag/zellij-v0.2.0-rc.11)
 contains six native archives, checksums, both installers and the generated
 Homebrew formula and Scoop manifest, plus the template catalog and nine archives. The [source repository](https://github.com/mylife-inc/Zellij)
 records implementation and verification evidence. The binary remains governed
