@@ -1,6 +1,6 @@
 # Zellij by Shebka
 
-The current development preview is **v0.2.0-rc.14**. This is the documentation
+The current development preview is **v0.2.0-rc.15**. This is the documentation
 and product website engine, unrelated to the terminal multiplexer.
 
 ## macOS and Linux
@@ -12,8 +12,8 @@ brew install mylife-inc/tap/zel
 Or install the native binary with an explicit preview version:
 
 ```sh
-curl -fsSL https://github.com/mylife-inc/releases/releases/download/zellij-v0.2.0-rc.14/install.sh -o /tmp/zel-install.sh
-ZEL_VERSION=v0.2.0-rc.14 sh /tmp/zel-install.sh
+curl -fsSL https://github.com/mylife-inc/releases/releases/download/zellij-v0.2.0-rc.15/install.sh -o /tmp/zel-install.sh
+ZEL_VERSION=v0.2.0-rc.15 sh /tmp/zel-install.sh
 ```
 
 The shell installer selects Intel/x64 or ARM64 and installs into
@@ -24,8 +24,8 @@ Linux requires glibc.
 ## Windows PowerShell
 
 ```powershell
-Invoke-WebRequest https://github.com/mylife-inc/releases/releases/download/zellij-v0.2.0-rc.14/install.ps1 -OutFile "$env:TEMP/zel-install.ps1"
-& "$env:TEMP/zel-install.ps1" -Version v0.2.0-rc.14
+Invoke-WebRequest https://github.com/mylife-inc/releases/releases/download/zellij-v0.2.0-rc.15/install.ps1 -OutFile "$env:TEMP/zel-install.ps1"
+& "$env:TEMP/zel-install.ps1" -Version v0.2.0-rc.15
 ```
 
 The native installer supports x64 and ARM64 Windows and defaults to
@@ -144,16 +144,23 @@ Each release also contains a catalog and checksummed archives. They remain
 available here independently of the development repository:
 
 ```sh
-zel create my-docs -t product-docs@0.1.0 --catalog https://github.com/mylife-inc/releases/releases/download/zellij-v0.2.0-rc.14/templates-catalog.json
+zel create my-docs -t product-docs@0.1.0 --catalog https://github.com/mylife-inc/releases/releases/download/zellij-v0.2.0-rc.15/templates-catalog.json
 ```
 
 Add `--offline` to reuse an already cached catalog and archive. Local directories
 are supported with `-t ./my-template`.
 
-The [release](https://github.com/mylife-inc/releases/releases/tag/zellij-v0.2.0-rc.14)
+The [release](https://github.com/mylife-inc/releases/releases/tag/zellij-v0.2.0-rc.15)
 contains six native archives, checksums, both installers and the generated
-Homebrew formula and Scoop manifest, the template catalog and nine archives, and
+Homebrew formula, Scoop manifest and WinGet manifest bundle, the template catalog and nine archives, and
 six separate renderer packages with their checksums. The [source repository](https://github.com/mylife-inc/Zellij)
 records implementation and verification evidence. The binary remains governed
 by the Zellij product's licensing; public downloads do not imply an open-source
 license.
+
+## WinGet status
+
+Candidate rc.15 includes checksum-pinned x64/ARM64 WinGet manifests and protects
+WinGet-owned executables during self-upgrade. Microsoft catalog acceptance is
+separate; public catalog installation is not yet announced. Use the standalone
+installer or the owned Scoop bucket until availability is verified.
