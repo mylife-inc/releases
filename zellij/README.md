@@ -1,6 +1,6 @@
 # Zellij by Shebka
 
-The current development preview is **v0.2.0-rc.12**. This is the documentation
+The current development preview is **v0.2.0-rc.13**. This is the documentation
 and product website engine, unrelated to the terminal multiplexer.
 
 ## macOS and Linux
@@ -12,22 +12,25 @@ brew install mylife-inc/tap/zel
 Or install the native binary with an explicit preview version:
 
 ```sh
-curl -fsSL https://github.com/mylife-inc/releases/releases/download/zellij-v0.2.0-rc.12/install.sh -o /tmp/zel-install.sh
-ZEL_VERSION=v0.2.0-rc.12 sh /tmp/zel-install.sh
+curl -fsSL https://github.com/mylife-inc/releases/releases/download/zellij-v0.2.0-rc.13/install.sh -o /tmp/zel-install.sh
+ZEL_VERSION=v0.2.0-rc.13 sh /tmp/zel-install.sh
 ```
 
-The shell installer selects Intel/x64 or ARM64 and installs into `~/.local/bin`
-by default. Add that directory to your PATH if needed. Linux requires glibc.
+The shell installer selects Intel/x64 or ARM64 and installs into
+`$ZELLIJ_HOME/bin`, defaulting to `~/Dev/config/zellij/bin`. Add the resolved
+directory to PATH. `ZEL_INSTALL_DIR` overrides the executable destination.
+Linux requires glibc.
 
 ## Windows PowerShell
 
 ```powershell
-Invoke-WebRequest https://github.com/mylife-inc/releases/releases/download/zellij-v0.2.0-rc.12/install.ps1 -OutFile "$env:TEMP/zel-install.ps1"
-& "$env:TEMP/zel-install.ps1" -Version v0.2.0-rc.12
+Invoke-WebRequest https://github.com/mylife-inc/releases/releases/download/zellij-v0.2.0-rc.13/install.ps1 -OutFile "$env:TEMP/zel-install.ps1"
+& "$env:TEMP/zel-install.ps1" -Version v0.2.0-rc.13
 ```
 
 The native installer supports x64 and ARM64 Windows and defaults to
-`%LOCALAPPDATA%\Programs\Zellij\bin`. Add the directory to your user PATH.
+`$env:ZELLIJ_HOME\bin`, defaulting to `%USERPROFILE%\Dev\config\zellij\bin`.
+`-InstallDir` overrides that destination. Add the resolved directory to your user PATH.
 
 Or install through the owned Scoop bucket:
 
@@ -35,6 +38,20 @@ Or install through the owned Scoop bucket:
 scoop bucket add mylife-inc https://github.com/mylife-inc/scoop-bucket
 scoop install mylife-inc/zel
 ```
+
+## Zellij resource home
+
+Set `ZELLIJ_HOME` to an absolute path, or leave it unset/empty to use
+`~/Dev/config/zellij` (under the Windows user profile on Windows). Renderer
+downloads use `cache/engines/`; remote templates use `cache/templates/` under
+that root. `ZEL_ENGINE_CACHE` and template `--cache-dir` remain specific overrides.
+Homebrew and Scoop keep their managed executable locations and use this same
+resource home at runtime. Their own package stores are unchanged.
+
+Existing binaries and caches are not silently moved or deleted. Self-upgrade
+updates the existing standalone executable in place. Use the pinned installer
+and update PATH when intentionally relocating it. A new rich build can populate
+the new cache; a copied renderer cache must match the CLI version and platform.
 
 ## Updates and channels
 
@@ -120,13 +137,13 @@ Each release also contains a catalog and checksummed archives. They remain
 available here independently of the development repository:
 
 ```sh
-zel create my-docs -t product-docs@0.1.0 --catalog https://github.com/mylife-inc/releases/releases/download/zellij-v0.2.0-rc.12/templates-catalog.json
+zel create my-docs -t product-docs@0.1.0 --catalog https://github.com/mylife-inc/releases/releases/download/zellij-v0.2.0-rc.13/templates-catalog.json
 ```
 
 Add `--offline` to reuse an already cached catalog and archive. Local directories
 are supported with `-t ./my-template`.
 
-The [release](https://github.com/mylife-inc/releases/releases/tag/zellij-v0.2.0-rc.12)
+The [release](https://github.com/mylife-inc/releases/releases/tag/zellij-v0.2.0-rc.13)
 contains six native archives, checksums, both installers and the generated
 Homebrew formula and Scoop manifest, the template catalog and nine archives, and
 six separate renderer packages with their checksums. The [source repository](https://github.com/mylife-inc/Zellij)
